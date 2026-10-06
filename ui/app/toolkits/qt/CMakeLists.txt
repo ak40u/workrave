@@ -77,15 +77,17 @@ if (PLATFORM_OS_MACOS)
     platforms/macos/MacOSOverlayWindow.mm
     platforms/macos/MouseMonitor.cc
     platforms/macos/MacOSDesktopWindow.cc
-    platforms/macos/MacDockTile.mm)
+    platforms/macos/MacDockTile.mm
+    platforms/macos/MacStatusTimers.mm)
 
-    set_source_files_properties(ToolkitMacOS.cc platforms/macos/MouseMonitor.cc platforms/macos/MacOSDesktopWindow.cc platforms/macos/MacDockTile.mm platforms/macos/MacOSBlockingOverlay.cc PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc")
+    set_source_files_properties(ToolkitMacOS.cc platforms/macos/MouseMonitor.cc platforms/macos/MacOSDesktopWindow.cc platforms/macos/MacDockTile.mm platforms/macos/MacStatusTimers.mm platforms/macos/MacOSBlockingOverlay.cc PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc")
     # IWYU does not support Objective-C++; exclude all macOS ObjC++ sources
     set_source_files_properties(
       ToolkitMacOS.cc
       platforms/macos/MouseMonitor.cc
       platforms/macos/MacOSDesktopWindow.cc
       platforms/macos/MacDockTile.mm
+      platforms/macos/MacStatusTimers.mm
       platforms/macos/MacOSBlockingOverlay.cc
       platforms/macos/MacOSOverlayWindow.mm
       PROPERTIES SKIP_LINTING ON)

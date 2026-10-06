@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Rob Caelers <robc@krandor.nl>
+// Copyright (C) 2001 - 2026 Rob Caelers & Raymond Penners
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -15,26 +15,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-#endif
+#ifndef MACOSPERMISSIONS_HH
+#define MACOSPERMISSIONS_HH
 
-#include "ApplicationMacOS.hh"
-
-#include "ui/macos/MacOSPermissions.hh"
-
-ApplicationMacOS::ApplicationMacOS(int argc, char **argv, std::shared_ptr<IToolkitFactory> toolkit_factory)
-  : Application(argc, argv, toolkit_factory)
+class MacOSPermissions
 {
-}
+public:
+  static bool has_input_monitoring();
+  static bool has_accessibility();
 
-void
-ApplicationMacOS::init_platform_pre()
-{
-}
+  static void request_input_monitoring();
+  static void open_input_monitoring_settings();
+  static void open_accessibility_settings();
 
-void
-ApplicationMacOS::init_platform_post()
-{
-  MacOSPermissions::check_at_startup();
-}
+  static void check_at_startup();
+};
+
+#endif // MACOSPERMISSIONS_HH

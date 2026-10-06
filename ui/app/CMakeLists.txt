@@ -134,6 +134,7 @@ if (PLATFORM_OS_MACOS)
     ApplicationMacOS.cc
     platforms/macos/MacOSLocker.cc
     platforms/macos/MacOSDock.mm
+    platforms/macos/MacOSPermissions.mm
     #platforms/macos/MacOSAppletWindow.cc
     #platforms/macos/MacOSStatusBarView.mm
     #platforms/macos/MacOSTimeBar.mm
@@ -142,12 +143,15 @@ if (PLATFORM_OS_MACOS)
   set_source_files_properties(Locale.cc
                               platforms/macos/MacOSLocker.cc
                               platforms/macos/MacOSDock.mm
+                              platforms/macos/MacOSPermissions.mm
                               PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc")
   set_source_files_properties(Locale.cc
                               platforms/macos/MacOSLocker.cc
                               platforms/macos/MacOSDock.mm
+                              platforms/macos/MacOSPermissions.mm
                               PROPERTIES SKIP_LINTING ON)
 
+  target_link_libraries(workrave-app PRIVATE ${IOKIT_LIBRARY})
   target_include_directories(workrave-app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos)
 endif()
 
@@ -356,6 +360,7 @@ if (APPLE)
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${WORKRAVE_VERSION}"
     MACOSX_BUNDLE_BUNDLE_VERSION "${WORKRAVE_VERSION}"
     MACOSX_BUNDLE_COPYRIGHT "Copyright (c) 2001-2026 Rob Caelers, Raymond Penners, Ray Satiro"
+    MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/toolkits/qt/platforms/macos/Info.plist.in"
     )
 
   set_source_files_properties(BreakWindow.cc PreludeWindow.cc MouseMonitor.cc ToolkitPlatformMac.cc PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc")

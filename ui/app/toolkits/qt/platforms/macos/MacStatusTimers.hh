@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Rob Caelers <robc@krandor.nl>
+// Copyright (C) 2026 Rob Caelers <robc@krandor.nl>
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,27 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
+#ifndef MACSTATUSTIMERS_HH
+#define MACSTATUSTIMERS_HH
 
-#ifdef HAVE_CONFIG_H
-#  include "config.h"
-#endif
+#include <functional>
+#include <memory>
+#include <string>
 
-#include "ApplicationMacOS.hh"
+class MacStatusTimersPrivate;
 
-#include "ui/macos/MacOSPermissions.hh"
-
-ApplicationMacOS::ApplicationMacOS(int argc, char **argv, std::shared_ptr<IToolkitFactory> toolkit_factory)
-  : Application(argc, argv, toolkit_factory)
+// Text-only item in the macOS menu bar, placed next to the Workrave status icon.
+class MacStatusTimers
 {
-}
+public:
+  MacStatusTimers();
+  ~MacStatusTimers();
 
-void
-ApplicationMacOS::init_platform_pre()
-{
-}
+  void set_text(const std::string &text);
+  void set_click_handler(std::function<void()> handler);
 
-void
-ApplicationMacOS::init_platform_post()
-{
-  MacOSPermissions::check_at_startup();
-}
+private:
+  std::unique_ptr<MacStatusTimersPrivate> priv;
+};
+
+#endif // MACSTATUSTIMERS_HH

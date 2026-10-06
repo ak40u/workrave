@@ -74,6 +74,8 @@ MainWindow::MainWindow(std::shared_ptr<IApplicationContext> app, QWidget *parent
   connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(on_show_contextmenu(const QPoint &)));
 
   GUIConfig::main_window_always_on_top().attach(this, [&](bool enabled) {
+    // Changing window flags hides the window; only bring it back if it was visible.
+    bool was_visible = isVisible();
     if (enabled)
       {
         setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
@@ -82,7 +84,10 @@ MainWindow::MainWindow(std::shared_ptr<IApplicationContext> app, QWidget *parent
       {
         setWindowFlags(windowFlags() & (~Qt::WindowStaysOnTopHint));
       }
-    show();
+    if (was_visible)
+      {
+        show();
+      }
   });
 
   GUIConfig::key_timerbox("main_window").connect(this, [this]() { on_enabled_changed(); });

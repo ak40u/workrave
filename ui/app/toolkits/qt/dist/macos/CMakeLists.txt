@@ -79,6 +79,7 @@ INSTALL(CODE "
             set(_app ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app)
             message(\"-- Ad-hoc signing app bundle...\")
             execute_process(COMMAND codesign --force --deep --sign - \${_app})
+            execute_process(COMMAND codesign --force --sign - -r \"${CMAKE_CURRENT_SOURCE_DIR}/adhoc-designated.req\" \${_app})
 	    endif()
         file(SHA256 \"${MACDEPLOYQT_EXECUTABLE}\" _mdt_hash)
         file(WRITE  \"${_deploy_stamp}\"            \"\${_mdt_hash}\")
@@ -133,6 +134,14 @@ INSTALL(CODE "
             endif()
         endif()
     endforeach()
+
+    # 3. The copied binary invalidates the bundle signature.  Re-sign ad-hoc with a
+    #    designated requirement (main executable only) that does not depend on the code hash, so macOS
+    #    keeps the Input Monitoring grant across rebuilds.
+    if(NOT \"${WORKRAVE_SIGN_IDENTITY}\")
+        execute_process(COMMAND codesign --force --deep --sign - \"${_deploy_app}\")
+        execute_process(COMMAND codesign --force --sign - -r \"${CMAKE_CURRENT_SOURCE_DIR}/adhoc-designated.req\" \"${_deploy_app}\")
+    endif()
 ")
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")

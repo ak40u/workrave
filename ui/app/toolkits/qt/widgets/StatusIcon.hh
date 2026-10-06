@@ -24,6 +24,7 @@
 
 #include <QSystemTrayIcon>
 #include <QIcon>
+#include <QTimer>
 
 #include "core/CoreTypes.hh"
 #include "utils/Signals.hh"
@@ -32,6 +33,7 @@
 #include "ui/IApplicationContext.hh"
 
 class ToolkitMenu;
+class MacStatusTimers;
 
 class StatusIcon
   : public QObject
@@ -41,6 +43,7 @@ class StatusIcon
 
 public:
   explicit StatusIcon(std::shared_ptr<IApplicationContext> app);
+  ~StatusIcon() override;
 
   void set_tooltip(const QString &tip);
   void show_balloon(const QString &id, const QString &title, const QString &balloon);
@@ -50,6 +53,7 @@ public:
 
 private:
   void on_operation_mode_changed(workrave::OperationMode m);
+  void refresh_timers();
 
 public Q_SLOTS:
   void on_activate(QSystemTrayIcon::ActivationReason reason);
@@ -57,6 +61,11 @@ public Q_SLOTS:
 
 private:
   std::map<workrave::OperationMode, QIcon> mode_icons;
+  std::shared_ptr<workrave::ICore> core;
+  QTimer refresh_timer;
+#if defined(PLATFORM_OS_MACOS)
+  std::unique_ptr<MacStatusTimers> status_timers;
+#endif
   std::shared_ptr<QSystemTrayIcon> tray_icon;
   std::shared_ptr<ToolkitMenu> menu;
   AppHold apphold;

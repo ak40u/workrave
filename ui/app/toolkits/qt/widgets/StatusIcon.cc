@@ -21,9 +21,16 @@
 
 #include "StatusIcon.hh"
 
+#include <QCursor>
+#include <QMenu>
+#include <QStringList>
+
 #include "ui/GUIConfig.hh"
 
 #include "ToolkitMenu.hh"
+#if defined(PLATFORM_OS_MACOS)
+#  include "MacStatusTimers.hh"
+#endif
 #include "UiUtil.hh"
 
 using namespace workrave;
@@ -55,15 +62,37 @@ StatusIcon::StatusIcon(std::shared_ptr<IApplicationContext> app)
 
   menu = std::make_shared<ToolkitMenu>(app->get_menu_model());
 
+#if !defined(PLATFORM_OS_MACOS)
+  // On macOS, setContextMenu() installs a status-item menu-tracking observer
+  // that calls -[NSEvent clickCount] on a non-mouse event when the menu is
+  // tracked out of process (macOS 14+), crashing the app. The menu is popped
+  // up manually in on_activate() instead.
   tray_icon->setContextMenu(menu->get_menu());
+#endif
 
-  auto core = app->get_core();
+  core = app->get_core();
   workrave::utils::connect(core->signal_operation_mode_changed(), this, [this](auto mode) { on_operation_mode_changed(mode); });
   OperationMode mode = core->get_regular_operation_mode();
   tray_icon->setIcon(mode_icons[mode]);
 
+#if defined(PLATFORM_OS_MACOS)
+  // Show the rest break and daily limit timers next to the icon in the menu bar.
+  status_timers = std::make_unique<MacStatusTimers>();
+  status_timers->set_click_handler([this]() { menu->get_menu()->popup(QCursor::pos()); });
+  refresh_timer.setInterval(1000);
+  QObject::connect(&refresh_timer, &QTimer::timeout, this, [this]() { refresh_timers(); });
+  refresh_timer.start();
+  refresh_timers();
+#endif
+
   GUIConfig::trayicon_enabled().attach(this, [&](bool enabled) {
+#if defined(PLATFORM_OS_MACOS)
+    // The timers item in the menu bar replaces the tray icon; the icon is only
+    // shown for the duration of a balloon message.
+    tray_icon->setVisible(false);
+#else
     tray_icon->setVisible(enabled);
+#endif
     apphold.set_hold(enabled && QSystemTrayIcon::isSystemTrayAvailable());
   });
 
@@ -71,10 +100,33 @@ StatusIcon::StatusIcon(std::shared_ptr<IApplicationContext> app)
   QObject::connect(tray_icon.get(), &QSystemTrayIcon::messageClicked, this, &StatusIcon::on_balloon_activate);
 }
 
+StatusIcon::~StatusIcon() = default;
+
 void
 StatusIcon::on_operation_mode_changed(OperationMode m)
 {
   tray_icon->setIcon(mode_icons[m]);
+}
+
+void
+StatusIcon::refresh_timers()
+{
+#if defined(PLATFORM_OS_MACOS)
+  QStringList parts;
+  for (auto id: {BREAK_ID_REST_BREAK, BREAK_ID_DAILY_LIMIT})
+    {
+      auto b = core->get_break(id);
+      if (!b || !b->is_enabled())
+        {
+          continue;
+        }
+      int64_t elapsed = b->get_elapsed_time();
+      int64_t limit = b->get_limit();
+      time_t value = (b->is_limit_enabled() && limit != 0) ? limit - elapsed : elapsed;
+      parts << UiUtil::time_to_string(value);
+    }
+  status_timers->set_text(parts.join("  ").toStdString());
+#endif
 }
 
 void
@@ -87,12 +139,23 @@ void
 StatusIcon::show_balloon(const QString &id, const QString &title, const QString &balloon)
 {
   active_balloon_id = id.toStdString();
+#if defined(PLATFORM_OS_MACOS)
+  tray_icon->setVisible(true);
+  QTimer::singleShot(10000, tray_icon.get(), [this]() { tray_icon->setVisible(false); });
+#endif
   tray_icon->showMessage(title, balloon);
 }
 
 void
 StatusIcon::on_activate(QSystemTrayIcon::ActivationReason reason)
 {
+#if defined(PLATFORM_OS_MACOS)
+  if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::Context)
+    {
+      menu->get_menu()->popup(QCursor::pos());
+      return;
+    }
+#endif
   if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick)
     {
       activate_signal();
