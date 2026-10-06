@@ -337,7 +337,7 @@ Item {
                                         width: tabContent.width
                                         height: 26
                                         color: (index % 2 === 1)
-                                               ? Qt.rgba(tok.edge.r, tok.edge.g, tok.edge.b, 0.30)
+                                               ? tok.panel
                                                : "transparent"
 
                                         Row {
@@ -529,7 +529,7 @@ Item {
             anchors.centerIn: parent
             text: parent.label
             font.pixelSize: 12
-            color: parent.enabled ? (parent.highlighted ? tok.bg : tok.ink) : tok.mute
+            color: parent.enabled ? (parent.highlighted ? tok.onAccent : tok.ink) : tok.mute
         }
 
         MouseArea {

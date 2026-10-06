@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlAboutDialog.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -42,6 +45,11 @@ QmlAboutDialog::QmlAboutDialog(QObject *parent)
 
   view = new QQuickView();
   view->setTitle(tr("About Workrave"));
+#ifdef Q_OS_MACOS
+  view->setColor(Qt::transparent);
+  MacGlass::attach(view);
+#endif
+
   view->setResizeMode(QQuickView::SizeRootObjectToView);
   view->setMinimumSize(QSize(540, 430));
   view->setMaximumSize(QSize(540, 430));

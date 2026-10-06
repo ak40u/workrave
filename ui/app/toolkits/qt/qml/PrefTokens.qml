@@ -6,29 +6,32 @@ QtObject {
     readonly property bool isDark: Qt.styleHints.colorScheme === 2
 
     // ── Colors ────────────────────────────────────────────────────────────────
-    readonly property color bg:         isDark ? "#1B1D1A" : "#F5F1EA"
-    readonly property color panel:      isDark ? "#23261F" : "#FFFFFF"
-    readonly property color panel2:     isDark ? "#2A2D26" : "#FAF6EE"
-    readonly property color edge:       isDark ? Qt.rgba(220/255, 215/255, 200/255, 0.10)
-                                               : Qt.rgba( 40/255,  45/255,  38/255, 0.10)
-    readonly property color edge2:      isDark ? Qt.rgba(220/255, 215/255, 200/255, 0.06)
-                                               : Qt.rgba( 40/255,  45/255,  38/255, 0.06)
-    readonly property color ink:        isDark ? "#E8E2D2" : "#2A2D29"
-    readonly property color ink2:       isDark ? "#C7C2B3" : "#4A4D46"
-    readonly property color mute:       isDark ? "#86887E" : "#8A8B82"
-    readonly property color sage:       isDark ? "#8FA88B" : "#6B8068"
-    readonly property color sageDeep:   isDark ? "#B4C9B0" : "#44563F"
-    readonly property color sageSoft:   isDark ? "#384034" : "#D9E1D2"
-    readonly property color clay:       isDark ? "#E0A07A" : "#C97B4A"
-    readonly property color claySoft:   isDark ? "#4A3325" : "#F2D9C5"
-    readonly property color track:      isDark ? "#2F322B" : "#E7E1D2"
-    readonly property color danger:     isDark ? "#D77F6F" : "#B85A4A"
-    readonly property color dangerSoft: isDark ? "#3D1F1A" : "#FFE8E5"
-    readonly property color warn:       isDark ? "#E8A050" : "#D4872A"
-    readonly property color rest:       isDark ? "#8FC99A" : "#7FAF88"
-    readonly property color actionBg:   isDark ? "#30332C" : "#F4F0E7"
-    readonly property color actionEdge: isDark ? Qt.rgba(232/255, 226/255, 210/255, 0.28)
-                                               : Qt.rgba( 42/255,  45/255,  41/255, 0.24)
+    // Glass design: windows get a native glass/blur backdrop (see MacGlass), so the
+    // surfaces here are translucent tints laid over it instead of opaque fills.
+    readonly property color bg:         "transparent"
+    readonly property color panel:      isDark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(1, 1, 1, 0.50)
+    readonly property color panel2:     isDark ? Qt.rgba(1, 1, 1, 0.04) : Qt.rgba(1, 1, 1, 0.30)
+    readonly property color edge:       isDark ? Qt.rgba(1, 1, 1, 0.20) : Qt.rgba(1, 1, 1, 0.80)
+    readonly property color edge2:      isDark ? Qt.rgba(1, 1, 1, 0.10) : Qt.rgba(1, 1, 1, 0.45)
+    readonly property color ink:        isDark ? "#F4F1E8" : "#1F221E"
+    readonly property color ink2:       isDark ? "#D6D2C5" : "#3C403A"
+    readonly property color mute:       isDark ? "#A3A599" : "#6A6C63"
+    readonly property color sage:       isDark ? "#9DBA99" : "#5E7A5B"
+    readonly property color sageDeep:   isDark ? "#BFD6BB" : "#3A4D36"
+    readonly property color sageSoft:   isDark ? Qt.rgba(0.62, 0.73, 0.60, 0.24) : Qt.rgba(0.37, 0.48, 0.36, 0.20)
+    readonly property color clay:       isDark ? "#E8AB86" : "#B96A3A"
+    readonly property color claySoft:   isDark ? Qt.rgba(0.91, 0.67, 0.53, 0.22) : Qt.rgba(0.73, 0.42, 0.23, 0.18)
+    readonly property color track:      isDark ? Qt.rgba(1, 1, 1, 0.14) : Qt.rgba(0, 0, 0, 0.10)
+    readonly property color danger:     isDark ? "#E58B7B" : "#B04A3A"
+    readonly property color dangerSoft: isDark ? Qt.rgba(0.90, 0.55, 0.48, 0.22) : Qt.rgba(0.69, 0.29, 0.23, 0.16)
+    readonly property color warn:       isDark ? "#EDAA5C" : "#C47820"
+    readonly property color rest:       isDark ? "#9AD6A5" : "#5E9A6A"
+    readonly property color actionBg:   isDark ? Qt.rgba(1, 1, 1, 0.13) : Qt.rgba(1, 1, 1, 0.65)
+    readonly property color actionEdge: isDark ? Qt.rgba(1, 1, 1, 0.34) : Qt.rgba(0, 0, 0, 0.18)
+    // Floating card over a full-screen glass backdrop (break windows).
+    readonly property color card:       isDark ? Qt.rgba(0.10, 0.11, 0.10, 0.55) : Qt.rgba(1, 1, 1, 0.62)
+    // Text colour on filled accent buttons.
+    readonly property color onAccent:   isDark ? "#1B1D1A" : "#FFFFFF"
 
     // ── Typography ────────────────────────────────────────────────────────────
     readonly property int labelPx:    14    // primary row label

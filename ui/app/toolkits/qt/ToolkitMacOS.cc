@@ -26,6 +26,7 @@
 #include "MacOSDesktopWindow.hh"
 #include "ui/macos/MacOSLocker.hh" // TODO: check if we need both
 #include "MacOSBlockingOverlay.hh" 
+#include "MacGlass.hh"
 
 #include <QCursor>
 #include <QEvent>
@@ -208,6 +209,10 @@ ToolkitMacOS::eventFilter(QObject *obj, QEvent *event)
     {
       bool floating = main_window->windowFlags().testFlag(Qt::FramelessWindowHint) || main_window->windowType() == Qt::Tool;
       configure_native_window(main_window->windowHandle(), main_window->testAttribute(Qt::WA_TranslucentBackground), floating);
+      if (main_window->testAttribute(Qt::WA_TranslucentBackground))
+        {
+          MacGlass::attach(main_window->windowHandle(), 12.0);
+        }
     }
   return Toolkit::eventFilter(obj, event);
 }

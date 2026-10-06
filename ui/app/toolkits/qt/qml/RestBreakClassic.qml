@@ -7,6 +7,8 @@ import QtQuick
 Item {
     id: root
 
+    PrefTokens { id: tok }
+
     // Historical Gtk msgids — reuses the existing po translations. The
     // mnemonic underscore ("_Skip") is stripped for display.
     readonly property string txtSkip:     qsTr("_Skip").replace("_", "")
@@ -15,15 +17,15 @@ Item {
     readonly property string txtSleep:    qsTr("Suspend")
 
     // ── Design tokens ────────────────────────────────────────────────────────
-    readonly property color colBg:      "#E8E8E8"
-    readonly property color colBar:     "#4A90D9"
-    readonly property color colTimeBar: "#90EE90"   // lightgreen, same as the Gtk TimeBar widget
-    readonly property color colBorder:  "#AAAAAA"
+    readonly property color colBg: tok.card
+    readonly property color colBar: tok.sage
+    readonly property color colTimeBar: tok.rest   // lightgreen, same as the Gtk TimeBar widget
+    readonly property color colBorder: tok.edge
     readonly property color colWarn:    "#F08700"
-    readonly property color colInk:     "#1A1A1A"
-    readonly property color colInk2:    "#444444"
-    readonly property color colBtn:     "#D4D0C8"
-    readonly property color colBtnTxt:  "#1A1A1A"
+    readonly property color colInk: tok.ink
+    readonly property color colInk2: tok.ink2
+    readonly property color colBtn: tok.actionBg
+    readonly property color colBtnTxt: tok.ink
 
     // ── Bridge bindings ──────────────────────────────────────────────────────
     readonly property int    blockMode:    bridge != null ? bridge.blockMode        : 1
@@ -71,7 +73,7 @@ Item {
         width: root.showEx ? Math.min(parent.width - 48, 600)
                            : Math.min(parent.width - 48, 440)
         color: colBg
-        radius: 0
+        radius: 16
         border.color: root.borderCol
         border.width: root.borderW
 
@@ -104,7 +106,7 @@ Item {
                     // Exercise image
                     Rectangle {
                         width: 250; height: 250
-                        color: "#D0D0D0"
+                        color: tok.track
 
                         Image {
                             id: exImg
@@ -115,7 +117,7 @@ Item {
                         }
                         Rectangle {
                             anchors.fill: parent
-                            color: "#D0D0D0"
+                            color: tok.track
                             visible: exImg.status !== Image.Ready
                                      || (bridge != null && bridge.exerciseImage === "")
                         }
@@ -124,7 +126,7 @@ Item {
                     // Vertical countdown bar — remaining fraction fills from top, shrinks downward
                     Rectangle {
                         width: 8; height: 250
-                        color: "#C0C0C0"
+                        color: tok.track
 
                         Rectangle {
                             width: parent.width
@@ -241,8 +243,8 @@ Item {
                 width: parent.width - 24
                 height: 22
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "#FFFFFF"
-                border.color: "#8F8F8F"; border.width: 1
+                color: tok.panel
+                border.color: tok.actionEdge; border.width: 1
                 clip: true
 
                 Rectangle {
@@ -271,7 +273,7 @@ Item {
 
                 Rectangle {
                     anchors.bottom: parent.bottom
-                    width: parent.width; height: 4; color: "#C0C0C0"
+                    width: parent.width; height: 4; color: tok.track
                     Rectangle {
                         width: Math.max(4, parent.width * root.lockProg)
                         height: parent.height; color: colBar
@@ -347,9 +349,9 @@ Item {
 
         height: 22
         width: Math.max(lbl.implicitWidth + 10, 30)
-        radius: 0
-        color: hovered ? "#C0BBAF" : colBtn
-        border.color: "#888888"; border.width: 1
+        radius: 8
+        color: hovered ? tok.sageSoft : colBtn
+        border.color: tok.actionEdge; border.width: 1
 
         Text {
             id: lbl
@@ -377,16 +379,16 @@ Item {
 
         height: 28
         width: Math.max(btnLbl.implicitWidth + 24, 88)
-        radius: 0
-        color: hovered ? "#C0BBAF" : colBtn
-        border.color: "#888888"; border.width: 1
+        radius: 8
+        color: hovered ? tok.sageSoft : colBtn
+        border.color: tok.actionEdge; border.width: 1
 
         Text {
             id: btnLbl
             anchors.centerIn: parent
             text: parent.label
             font.pixelSize: 12
-            color: parent.enabled ? colBtnTxt : "#888888"
+            color: parent.enabled ? colBtnTxt : tok.mute
         }
 
         MouseArea {

@@ -9,6 +9,8 @@ import QtQuick
 Item {
     id: root
 
+    PrefTokens { id: tok }
+
     // ── Bridge bindings ───────────────────────────────────────────────────────
     readonly property int stage: bridge != null ? bridge.stage : 0
 
@@ -29,7 +31,7 @@ Item {
         id: card
         anchors.fill: parent
 
-        color:  "#E8E8E8"
+        color:  tok.card
         radius: 2
 
         // 1 px neutral border in Initial/MoveOut.
@@ -37,7 +39,7 @@ Item {
         border.width: (root.stage === 1 || root.stage === 2) && root.flashOn ? 6 : 1
         border.color: root.stage === 1 ? "#F08000"
                     : root.stage === 2 ? "#CC2222"
-                    :                    "#8A8885"
+                    :                    tok.edge
 
         // ── Row: icon | heading + progress bar ───────────────────────────────
         // Gtk metrics: 6px frame + 6px border = 12px padding, 6px box spacing.
@@ -72,7 +74,7 @@ Item {
                     text: bridge != null ? bridge.heading : qsTr("Time for a break?")
                     font.bold: true
                     font.pixelSize: 15
-                    color: "#1A1A1A"
+                    color: tok.ink
                     elide: Text.ElideRight
                     renderType: Text.NativeRendering
                 }
@@ -85,8 +87,8 @@ Item {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: "#D0CBC6"
-                        border.color: "#8F8F8F"; border.width: 1
+                        color: tok.actionBg
+                        border.color: tok.actionEdge; border.width: 1
                     }
 
                     // Elapsed = 1 − remaining (bridge.ringProgress = remaining/max)
@@ -101,7 +103,7 @@ Item {
                         anchors.centerIn: parent
                         text: bridge != null ? bridge.countdownText : qsTr("Break in {}")
                         font.pixelSize: 12
-                        color: "#1A1A1A"
+                        color: tok.ink
                         renderType: Text.NativeRendering
                     }
                 }

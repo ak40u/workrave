@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlRestBreakWindow.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <random>
 
@@ -621,6 +624,9 @@ QmlRestBreakWindow::configure_view_for_block_mode()
 #endif
   view->setFlags(window_flags);
   view->setColor(Qt::transparent);
+#ifdef Q_OS_MACOS
+  MacGlass::attach(view);
+#endif
 }
 
 void

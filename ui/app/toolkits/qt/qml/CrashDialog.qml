@@ -300,7 +300,7 @@ Item {
             anchors.centerIn: parent
             text: parent.label
             font.pixelSize: 12
-            color: parent.enabled ? (parent.highlighted ? tok.bg : tok.ink) : tok.mute
+            color: parent.enabled ? (parent.highlighted ? tok.onAccent : tok.ink) : tok.mute
         }
 
         MouseArea {

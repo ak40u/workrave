@@ -8,15 +8,17 @@ import QtQuick
 Item {
     id: root
 
+    PrefTokens { id: tok }
+
     signal closeRequested()
 
     readonly property double exProgress: exercisesBridge != null ? exercisesBridge.exerciseProgress : 1.0
     readonly property bool   exPaused:   exercisesBridge != null ? exercisesBridge.isPaused : false
 
-    readonly property color colBg:     "#EFEFEF"
-    readonly property color colBar:    "#4A90D9"
-    readonly property color colInk:    "#1A1A1A"
-    readonly property color colInk2:   "#444444"
+    readonly property color colBg: tok.card
+    readonly property color colBar: tok.sage
+    readonly property color colInk: tok.ink
+    readonly property color colInk2: tok.ink2
 
     Rectangle {
         anchors.fill: parent
@@ -32,7 +34,7 @@ Item {
                 id: imgPanel
                 anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
                 width: 260
-                color: "#FFFFFF"
+                color: tok.panel
                 border.color: "#B0B0B0"; border.width: 1
 
                 Image {
@@ -49,7 +51,7 @@ Item {
                 id: countdownBar
                 anchors { top: parent.top; left: imgPanel.right; bottom: parent.bottom; leftMargin: 8 }
                 width: 8
-                color: "#C0C0C0"
+                color: tok.track
 
                 Rectangle {
                     width: parent.width
@@ -116,7 +118,7 @@ Item {
 
         height: 30
         width: Math.max(lbl.implicitWidth + 24, 96)
-        radius: 0
+        radius: 8
         color: hovered ? "#E4E4E4" : "#FAFAFA"
         border.color: "#B0B0B0"; border.width: 1
 
@@ -125,7 +127,7 @@ Item {
             anchors.centerIn: parent
             text: parent.label
             font.pixelSize: 12
-            color: "#1A1A1A"
+            color: tok.ink
         }
 
         MouseArea {

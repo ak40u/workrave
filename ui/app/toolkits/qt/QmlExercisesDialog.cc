@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlExercisesDialog.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <algorithm>
 #include <random>
@@ -285,6 +288,11 @@ QmlExercisesDialog::QmlExercisesDialog(std::shared_ptr<IApplicationContext> app,
 
   view = new QQuickView();
   view->setTitle(tr("Exercises"));
+#ifdef Q_OS_MACOS
+  view->setColor(Qt::transparent);
+  MacGlass::attach(view);
+#endif
+
   view->setResizeMode(QQuickView::SizeRootObjectToView);
   view->setMinimumSize(QSize(600, 340));
   view->resize(680, 420);

@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlPrefsDialog.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <QQuickView>
 #include <QQuickItem>
@@ -69,6 +72,10 @@ QmlPrefsDialog::QmlPrefsDialog(std::shared_ptr<IApplicationContext> app, QObject
 #endif
   view->engine()->addImportPath(QLibraryInfo::path(QLibraryInfo::QmlImportsPath));
   view->setResizeMode(QQuickView::SizeRootObjectToView);
+#ifdef Q_OS_MACOS
+  view->setColor(Qt::transparent);
+  MacGlass::attach(view);
+#endif
   view->setTitle(tr("Workrave — Preferences"));
   view->setMinimumSize(QSize(720, 520));
   view->resize(880, 620);

@@ -7,20 +7,22 @@ import QtQuick
 Item {
     id: root
 
+    PrefTokens { id: tok }
+
     // Historical Gtk msgids — reuses the existing po translations. The
     // mnemonic underscore ("_Skip") is stripped for display.
     readonly property string txtSkip:     qsTr("_Skip").replace("_", "")
     readonly property string txtPostpone: qsTr("_Postpone").replace("_", "")
 
     // ── Design tokens ────────────────────────────────────────────────────────
-    readonly property color colBg:     "#E8E8E8"
-    readonly property color colBar:    "#4A90D9"
-    readonly property color colBorder: "#AAAAAA"
+    readonly property color colBg: tok.card
+    readonly property color colBar: tok.sage
+    readonly property color colBorder: tok.edge
     readonly property color colWarn:   "#F08700"
-    readonly property color colInk:    "#1A1A1A"
-    readonly property color colInk2:   "#444444"
-    readonly property color colBtn:    "#D4D0C8"
-    readonly property color colBtnTxt: "#1A1A1A"
+    readonly property color colInk: tok.ink
+    readonly property color colInk2: tok.ink2
+    readonly property color colBtn: tok.actionBg
+    readonly property color colBtnTxt: tok.ink
 
     // ── Bridge bindings ──────────────────────────────────────────────────────
     readonly property int    blockMode:   bridge != null ? bridge.blockMode      : 1
@@ -60,7 +62,7 @@ Item {
         z: 1
         width: Math.min(parent.width - 48, 400)
         color: colBg
-        radius: 0
+        radius: 16
         border.color: root.borderCol
         border.width: root.borderW
 
@@ -130,8 +132,8 @@ Item {
                 width: parent.width - 24
                 height: 22
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "#FFFFFF"
-                border.color: "#8F8F8F"; border.width: 1
+                color: tok.panel
+                border.color: tok.actionEdge; border.width: 1
                 clip: true
 
                 Rectangle {
@@ -160,7 +162,7 @@ Item {
 
                 Rectangle {
                     anchors.bottom: parent.bottom
-                    width: parent.width; height: 4; color: "#C0C0C0"
+                    width: parent.width; height: 4; color: tok.track
                     Rectangle {
                         width: Math.max(4, parent.width * root.lockProg)
                         height: parent.height; color: colBar
@@ -219,16 +221,16 @@ Item {
 
         height: 28
         width: Math.max(btnText.implicitWidth + 24, 88)
-        radius: 0
-        color: hovered ? "#C0BBAF" : colBtn
-        border.color: "#888888"; border.width: 1
+        radius: 8
+        color: hovered ? tok.sageSoft : colBtn
+        border.color: tok.actionEdge; border.width: 1
 
         Text {
             id: btnText
             anchors.centerIn: parent
             text: parent.label
             font.pixelSize: 12
-            color: parent.enabled ? colBtnTxt : "#888888"
+            color: parent.enabled ? colBtnTxt : tok.mute
         }
 
         MouseArea {

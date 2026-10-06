@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlDailyLimitWindow.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <QQmlContext>
 #include <QScreen>
@@ -276,6 +279,9 @@ QmlDailyLimitWindow::configure_view_for_block_mode()
 #endif
   view->setFlags(window_flags);
   view->setColor(Qt::transparent);
+#ifdef Q_OS_MACOS
+  MacGlass::attach(view, 18.0);
+#endif
 }
 
 void

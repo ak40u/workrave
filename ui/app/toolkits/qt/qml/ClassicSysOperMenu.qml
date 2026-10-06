@@ -7,6 +7,8 @@ import QtQuick
 Item {
     id: opRoot
 
+    PrefTokens { id: tok }
+
     property bool lockable: false
     property bool shutdownable: false
     property bool sleepable: false
@@ -41,9 +43,9 @@ Item {
         id: button
         height: 28
         width: Math.max(btnLbl.implicitWidth + 24, 88)
-        radius: 0
-        color: btnArea.containsMouse ? "#C0BBAF" : "#D4D0C8"
-        border.color: "#888888"; border.width: 1
+        radius: 8
+        color: btnArea.containsMouse ? tok.sageSoft : tok.actionBg
+        border.color: tok.actionEdge; border.width: 1
 
         Text {
             id: btnLbl
@@ -51,7 +53,7 @@ Item {
             text: opRoot.multi ? qsTr("Lock...") + "  ▾"
                                : (opRoot.ops.length > 0 ? opRoot.ops[0].label : "")
             font.pixelSize: 12
-            color: "#1A1A1A"
+            color: tok.ink
         }
 
         MouseArea {
@@ -76,8 +78,8 @@ Item {
         y: button.height + 2
         width: Math.max(button.width, 132)
         height: itemsCol.implicitHeight + 2
-        color: "#E8E8E8"
-        border.color: "#888888"; border.width: 1
+        color: tok.card
+        border.color: tok.actionEdge; border.width: 1
 
         Column {
             id: itemsCol
@@ -90,13 +92,13 @@ Item {
                     required property var modelData
                     width: itemsCol.width
                     height: 26
-                    color: itemArea.containsMouse ? "#C0BBAF" : "transparent"
+                    color: itemArea.containsMouse ? tok.sageSoft : "transparent"
 
                     Text {
                         anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
                         text: opItem.modelData.label
                         font.pixelSize: 12
-                        color: "#1A1A1A"
+                        color: tok.ink
                     }
 
                     MouseArea {

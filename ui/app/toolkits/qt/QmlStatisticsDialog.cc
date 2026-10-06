@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlStatisticsDialog.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <algorithm>
 #include <array>
@@ -476,6 +479,11 @@ QmlStatisticsDialog::QmlStatisticsDialog(std::shared_ptr<IApplicationContext> ap
 
   view_ = new QQuickView;
   view_->setTitle(QObject::tr("Statistics"));
+#ifdef Q_OS_MACOS
+  view_->setColor(Qt::transparent);
+  MacGlass::attach(view_);
+#endif
+
   view_->setResizeMode(QQuickView::SizeRootObjectToView);
   view_->setMinimumSize(QSize(860, 580));
   view_->resize(860, 580);

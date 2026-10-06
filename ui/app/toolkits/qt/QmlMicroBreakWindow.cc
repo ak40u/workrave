@@ -19,6 +19,9 @@
 #endif
 
 #include "QmlMicroBreakWindow.hh"
+#ifdef Q_OS_MACOS
+#  include "MacGlass.hh"
+#endif
 
 #include <QQmlContext>
 #include <QScreen>
@@ -331,7 +334,12 @@ QmlMicroBreakWindow::configure_view_for_block_mode()
   if (block_mode == BlockMode::All)
     {
       view->setFlags(window_flags);
+#ifdef Q_OS_MACOS
+      view->setColor(Qt::transparent);
+      MacGlass::attach(view, 24.0);
+#else
       view->setColor(QColor("#1B1D1A"));
+#endif
     }
   else
     {
