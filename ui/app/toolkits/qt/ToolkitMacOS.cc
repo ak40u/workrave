@@ -38,6 +38,7 @@ using namespace workrave;
 
 #include <QEvent>
 #include <QTimer>
+#include <QStyleHints>
 #include <QWindow>
 
 // Re-asserts the NSWindow's opaque/background state to match the QWidget's
@@ -92,6 +93,17 @@ ToolkitMacOS::ToolkitMacOS(int &argc, char **argv)
 {
   QApplication::setStyle(new MacOSMenuStyle(QStringLiteral("macos")));
   locker = std::make_shared<MacOSLocker>();
+
+  // Debug aid: WORKRAVE_COLOR_SCHEME=light|dark overrides the system appearance.
+  // Qt derives its colour scheme from NSApp, so set the appearance there.
+  const QByteArray scheme = qgetenv("WORKRAVE_COLOR_SCHEME");
+  if (scheme == "light" || scheme == "dark")
+    {
+      const bool light = scheme == "light";
+      QTimer::singleShot(500, this, [light]() {
+        NSApp.appearance = [NSAppearance appearanceNamed:light ? NSAppearanceNameAqua : NSAppearanceNameDarkAqua];
+      });
+    }
 
   dock_policy_timer.setInterval(1000);
   QObject::connect(&dock_policy_timer, &QTimer::timeout, this, [this]() {

@@ -19,7 +19,7 @@ Item {
     // ── Design tokens ────────────────────────────────────────────────────────
     readonly property color colBg: tok.card
     readonly property color colBar: tok.sage
-    readonly property color colTimeBar: tok.rest   // lightgreen, same as the Gtk TimeBar widget
+    readonly property color colTimeBar: "#90EE90"   // lightgreen, same as the Gtk TimeBar widget
     readonly property color colBorder: tok.edge
     readonly property color colWarn:    "#F08700"
     readonly property color colInk: tok.ink
@@ -243,7 +243,7 @@ Item {
                 width: parent.width - 24
                 height: 22
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: tok.panel
+                color: Qt.rgba(1, 1, 1, 0.85)
                 border.color: tok.actionEdge; border.width: 1
                 clip: true
 
@@ -259,7 +259,7 @@ Item {
                     anchors.centerIn: parent
                     text: bridge != null ? bridge.breakTime : qsTr("Rest break for {}")
                     font.pixelSize: 12
-                    color: colInk
+                    color: "#1A1A1A"
                 }
             }
 

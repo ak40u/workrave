@@ -8,26 +8,26 @@ QtObject {
     // ── Colors ────────────────────────────────────────────────────────────────
     // Glass design: windows get a native glass/blur backdrop (see MacGlass), so the
     // surfaces here are translucent tints laid over it instead of opaque fills.
-    readonly property color bg:         "transparent"
-    readonly property color panel:      isDark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(1, 1, 1, 0.50)
+    readonly property color bg:         isDark ? "transparent" : Qt.rgba(1, 1, 1, 0.38)
+    readonly property color panel:      isDark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(1, 1, 1, 0.38)
     readonly property color panel2:     isDark ? Qt.rgba(1, 1, 1, 0.04) : Qt.rgba(1, 1, 1, 0.30)
     readonly property color edge:       isDark ? Qt.rgba(1, 1, 1, 0.20) : Qt.rgba(1, 1, 1, 0.80)
     readonly property color edge2:      isDark ? Qt.rgba(1, 1, 1, 0.10) : Qt.rgba(1, 1, 1, 0.45)
-    readonly property color ink:        isDark ? "#F4F1E8" : "#1F221E"
-    readonly property color ink2:       isDark ? "#D6D2C5" : "#3C403A"
-    readonly property color mute:       isDark ? "#A3A599" : "#6A6C63"
-    readonly property color sage:       isDark ? "#9DBA99" : "#5E7A5B"
-    readonly property color sageDeep:   isDark ? "#BFD6BB" : "#3A4D36"
+    readonly property color ink:        isDark ? "#F4F1E8" : "#161814"
+    readonly property color ink2:       isDark ? "#D6D2C5" : "#2B2E28"
+    readonly property color mute:       isDark ? "#A3A599" : "#46483F"
+    readonly property color sage:       isDark ? "#9DBA99" : "#4F6B4C"
+    readonly property color sageDeep:   isDark ? "#BFD6BB" : "#2F4230"
     readonly property color sageSoft:   isDark ? Qt.rgba(0.62, 0.73, 0.60, 0.24) : Qt.rgba(0.37, 0.48, 0.36, 0.20)
     readonly property color clay:       isDark ? "#E8AB86" : "#B96A3A"
     readonly property color claySoft:   isDark ? Qt.rgba(0.91, 0.67, 0.53, 0.22) : Qt.rgba(0.73, 0.42, 0.23, 0.18)
-    readonly property color track:      isDark ? Qt.rgba(1, 1, 1, 0.14) : Qt.rgba(0, 0, 0, 0.10)
+    readonly property color track:      isDark ? Qt.rgba(1, 1, 1, 0.14) : Qt.rgba(0, 0, 0, 0.18)
     readonly property color danger:     isDark ? "#E58B7B" : "#B04A3A"
     readonly property color dangerSoft: isDark ? Qt.rgba(0.90, 0.55, 0.48, 0.22) : Qt.rgba(0.69, 0.29, 0.23, 0.16)
     readonly property color warn:       isDark ? "#EDAA5C" : "#C47820"
     readonly property color rest:       isDark ? "#9AD6A5" : "#5E9A6A"
     readonly property color actionBg:   isDark ? Qt.rgba(1, 1, 1, 0.13) : Qt.rgba(1, 1, 1, 0.65)
-    readonly property color actionEdge: isDark ? Qt.rgba(1, 1, 1, 0.34) : Qt.rgba(0, 0, 0, 0.18)
+    readonly property color actionEdge: isDark ? Qt.rgba(1, 1, 1, 0.34) : Qt.rgba(0, 0, 0, 0.30)
     // Floating card over a full-screen glass backdrop (break windows).
     readonly property color card:       isDark ? Qt.rgba(0.10, 0.11, 0.10, 0.55) : Qt.rgba(1, 1, 1, 0.62)
     // Text colour on filled accent buttons.

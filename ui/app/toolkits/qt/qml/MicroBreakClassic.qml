@@ -132,7 +132,7 @@ Item {
                 width: parent.width - 24
                 height: 22
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: tok.panel
+                color: Qt.rgba(1, 1, 1, 0.85)
                 border.color: tok.actionEdge; border.width: 1
                 clip: true
 
@@ -148,7 +148,7 @@ Item {
                     anchors.centerIn: parent
                     text: root.breakName + " " + root.timeLeft
                     font.pixelSize: 12
-                    color: colInk
+                    color: "#1A1A1A"
                 }
             }
 
