@@ -26,6 +26,7 @@
 #include <QProxyStyle>
 #include <QStyleOption>
 #include <QMenuBar>
+#include <QTimer>
 
 #include "MacDockTile.hh"
 #include "ui/macos/MacOSLocker.hh"
@@ -44,6 +45,7 @@ public:
   ~ToolkitMacOS() override = default;
 
   // IToolkit
+  void show_window(WindowType type) override;
   void init(std::shared_ptr<IApplicationContext> app) override;
   auto create_break_window(int screen_index, workrave::BreakId break_id, BreakFlags break_flags) -> IBreakWindow::Ptr override;
   auto get_locker() -> std::shared_ptr<Locker> override;
@@ -55,6 +57,7 @@ public:
 private:
   bool eventFilter(QObject *obj, QEvent *event) override;
 
+  QTimer dock_policy_timer;
   std::shared_ptr<MacOSLocker> locker;
   std::shared_ptr<ToolkitMenu> dock_menu;
   std::unique_ptr<MacDockTile> dock_tile;

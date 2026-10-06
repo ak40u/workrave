@@ -91,6 +91,42 @@ ToolkitMacOS::ToolkitMacOS(int &argc, char **argv)
 {
   QApplication::setStyle(new MacOSMenuStyle(QStringLiteral("macos")));
   locker = std::make_shared<MacOSLocker>();
+
+  dock_policy_timer.setInterval(1000);
+  QObject::connect(&dock_policy_timer, &QTimer::timeout, this, [this]() {
+    for (QWindow *w: QGuiApplication::topLevelWindows())
+      {
+        if (w->isVisible())
+          {
+            return;
+          }
+      }
+    [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
+    dock_policy_timer.stop();
+  });
+}
+
+void
+ToolkitMacOS::show_window(WindowType type)
+{
+  Toolkit::show_window(type);
+
+  // Workrave runs as a UI element (no Dock icon), and such an app cannot come to
+  // the front: its windows would open behind other applications.  Become a
+  // regular app while a window is shown and go back once all windows are closed.
+  [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+  // The policy change takes effect asynchronously, so activate once it has.
+  QTimer::singleShot(150, this, []() {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    [NSApp activateIgnoringOtherApps:YES];
+#pragma clang diagnostic pop
+  });
+
+  if (!dock_policy_timer.isActive())
+    {
+      dock_policy_timer.start();
+    }
 }
 
 void
@@ -160,10 +196,8 @@ ToolkitMacOS::get_desktop_image() -> QPixmap
 bool
 ToolkitMacOS::event(QEvent *e)
 {
-  if (e->type() == QEvent::ApplicationActivate)
-    {
-      show_window(IToolkit::WindowType::Main);
-    }
+  // Activation must not open the main window: Workrave lives in the menu bar and
+  // is activated by the status item menu and when dialogs are shown.
   return Toolkit::event(e);
 }
 
