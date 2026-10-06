@@ -46,6 +46,13 @@ INSTALL(CODE "
         endif()
     endif()
 
+    # A freshly installed binary still points at the build-tree libraries; loading
+    # those next to the bundled Qt plugins mixes two sets of Qt.  Redeploy then.
+    execute_process(COMMAND otool -L \"${_deploy_app}/Contents/MacOS/${PROJECT_NAME}\" OUTPUT_VARIABLE _bin_libs ERROR_QUIET)
+    if(\"\${_bin_libs}\" MATCHES \"/opt/homebrew\")
+        set(_need_deploy TRUE)
+    endif()
+
     if(_need_deploy)
         message(\"-- Installing Qt frameworks and plugins...\")
         file(REMOVE_RECURSE
