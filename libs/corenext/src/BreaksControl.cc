@@ -318,15 +318,18 @@ BreaksControl::set_insist_policy(InsistPolicy p)
   TRACE_ENTRY_PAR(p);
   TRACE_MSG("current {}", active_insist_policy);
 
-  if (active_insist_policy != InsistPolicy::Invalid && insist_policy != p)
+  // Outside a shown break only remember the policy: the next ShowBreak applies it.
+  // Freezing here would halt the timers with no BreakIdle left to defrost them.
+  if (active_insist_policy == InsistPolicy::Invalid)
+    {
+      insist_policy = p;
+      return;
+    }
+
+  if (insist_policy != p)
     {
       TRACE_MSG("refreeze {}", active_insist_policy);
       defrost();
-      insist_policy = p;
-      freeze();
-    }
-  else
-    {
       insist_policy = p;
       freeze();
     }

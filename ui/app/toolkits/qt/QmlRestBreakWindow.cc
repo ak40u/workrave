@@ -576,6 +576,8 @@ QmlRestBreakWindow::~QmlRestBreakWindow()
     }
 #endif
   delete view;
+  // The bridge owns the exercise timer, which must not outlive the break.
+  delete bridge;
 }
 
 void

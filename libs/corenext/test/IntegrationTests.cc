@@ -2362,6 +2362,23 @@ TEST_F(IntegrationTest, test_insist_policy_invalid)
   verify();
 }
 
+TEST_F(IntegrationTest, test_insist_policy_outside_break_keeps_timers_running)
+{
+  init();
+
+  config->set_value("breaks/micro_pause/enabled", false);
+
+  // A break window that outlives its break may still change the policy.
+  core->set_insist_policy(workrave::InsistPolicy::Halt);
+
+  auto rb = core->get_break(workrave::BREAK_ID_REST_BREAK);
+  int64_t elapsed = rb->get_elapsed_time();
+  tick(true, 100);
+  EXPECT_GE(rb->get_elapsed_time(), elapsed + 90);
+
+  verify();
+}
+
 TEST_F(IntegrationTest, test_insist_policy_ignore_defrost_while_suspended)
 {
   init();
